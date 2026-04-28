@@ -8,10 +8,11 @@ interface Props {
   icon: React.ReactNode;
   boldIcon?: React.ReactNode;
   variant: "outlined" | "bold";
+  color?: string;
 }
 
 const IconPreview = (props: Props) => {
-  const { outlinedName, boldName, icon, boldIcon, variant } = props;
+  const { outlinedName, boldName, icon, boldIcon, variant, color } = props;
 
   const onCopySvg = () => {
     const iconElement = document.querySelector(`#icon-${outlinedName}`);
@@ -29,7 +30,7 @@ const IconPreview = (props: Props) => {
   }, [variant, boldName, boldIcon, outlinedName, icon]);
 
   return isValid ? (
-    <div className="icon-preview">
+    <div className="icon-preview" style={{ color: color }}>
       <div className="icon" id={"icon-" + outlinedName}>
         {variant === "bold" ? boldIcon : icon}
       </div>

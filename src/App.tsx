@@ -5,13 +5,16 @@ import "./styles/global.css";
 import "./styles/home.css";
 import { iconSections, IconSectionProps } from "./mock/icons";
 import IconPreview from "./components/common/IconPreview";
-import { Input, Switch } from "beca-ui";
+import { ColorPicker, Input, Space, Switch } from "beca-ui";
+import { useDebounce } from "./utils";
 
 function App() {
   const [searchText, setSearchText] = useState<string>("");
   const [iconSectionsData, setIconSectionsData] =
     useState<IconSectionProps[]>(iconSections);
   const [variant, setVariant] = useState<"outlined" | "bold">("outlined");
+  const [color, setColor] = useState<string>();
+  const debouncedColor = useDebounce(color, 1000);
 
   useEffect(() => {
     const iconSectionsTmp: IconSectionProps[] = [];
@@ -33,16 +36,28 @@ function App() {
     setIconSectionsData(iconSectionsTmp);
   }, [searchText]);
 
+  const handleColorChange = (color: string) => {
+    setColor(color);
+  };
+
   return (
     <div className="main-container">
       <div className="main-header">
         <h2 className="main-title">Becawork Icons</h2>
-        <Switch
-          checked={variant === "bold"}
-          onChange={(checked) => setVariant(checked ? "bold" : "outlined")}
-          checkedChildren="Bold"
-          unCheckedChildren="Outlined"
-        />
+        <Space>
+          <ColorPicker
+            value={color}
+            onChange={(e) => {
+              handleColorChange(e.toHexString());
+            }}
+          />
+          <Switch
+            checked={variant === "bold"}
+            onChange={(checked) => setVariant(checked ? "bold" : "outlined")}
+            checkedChildren="Bold"
+            unCheckedChildren="Outlined"
+          />
+        </Space>
       </div>
       <div className="search-input-wrap">
         <Input
@@ -64,6 +79,7 @@ function App() {
                   icon={icon.outlinedIcon}
                   boldIcon={icon.boldIcon}
                   variant={variant}
+                  color={debouncedColor}
                 />
               ))}
             </div>

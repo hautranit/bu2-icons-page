@@ -11,6 +11,7 @@ export interface IconProps {
   outlinedIcon: React.ReactNode;
   boldIcon?: React.ReactNode;
 }
+
 export const iconSections: IconSectionProps[] = [
   {
     title: "Money",
